@@ -7,15 +7,19 @@ import userRoutes from "./routes/user.routes.js";
 import songsRoutes from "./routes/songs.routes.js";
 import albumRoutes from "./routes/album.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
-
-const corsOptions = {
-  origin: "http://localhost:5173",
-};
+import connectDatabase from "./lib/dbConnect.js";
 
 configDotenv();
+const corsOptions = {
+  // origin: "http://localhost:5173",
+  origin: "*",
+};
+
+connectDatabase();
 const app = express();
 app.use(cookieParser());
 app.use(cors(corsOptions));
+app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
