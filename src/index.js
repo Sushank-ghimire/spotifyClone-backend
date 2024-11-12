@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import adminRoutes from "./routes/admin.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import songsRoutes from "./routes/songs.routes.js";
+import albumRoutes from "./routes/album.routes.js";
+import statsRoutes from "./routes/stats.routes.js";
 
 const corsOptions = {
   origin: "http://localhost:5173",
@@ -20,6 +23,9 @@ app.get("/", (req, res) => res.send("Hello world"));
 
 // User Routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/songs", songsRoutes);
+app.use("/api/v1/album", albumRoutes);
+app.use("/api/v1/stats", statsRoutes);
 
 // Admin auth protected routes
 app.use("/api/v1/admin", adminRoutes);
