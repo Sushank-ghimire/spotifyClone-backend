@@ -1,69 +1,150 @@
-import jwt from "jsonwebtoken";
-import { jwtSecret } from "../constants.js";
+import { Songs } from "../models/Songs.models.js";
+import { Album } from "../models/Album.models.js";
+import { uploadToCloudinary } from "../lib/CloudinaryUpload.js";
 
-const loginAdmin = async (req, res) => {
+const createSong = async (req, res, next) => {
   try {
-    const { email } = req.body;
-    // Generate a JWT token
-    const token = jwt.sign({ email }, jwtSecret, { expiresIn: "1h" });
-
-    // Set the token as a cookie
-    res.cookie("adminAuth-token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
-
-    return res
-      .status(200)
-      .json({ success: true, message: "Admin login successful", token: token });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
-const accessToken = async (req, res) => {
-  try {
-    const refreshToken = req.cookies["adminAuth-token"];
-    if (!refreshToken) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Sign in again required" });
+    if (!req.files || !req.files.audioFile || !req.files.imageFile) {
+      return res.status(400).json({
+        success: false,
+        message: "You can only upload audiofiles and imagefiles",
+      });
     }
 
-    const admin = await jwt.verify(refreshToken, jwtSecret);
+    const { title, artist, albumId, duration } = req.body;
 
-    const { email } = admin;
+    const allFields = [title, artist, albumId, duration];
 
-    const newAccessToken = jwt.sign({ email: email }, jwtSecret, {
-      expiresIn: "1d",
+    if (allFields.some((field) => !field || field === "")) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required", success: false });
+    }
+
+    const audioFile = req.files?.audioFile;
+    const imageFile = req.files?.imageFile;
+
+    const imageUrl = await uploadToCloudinary(imageFile);
+    const audioUrl = await uploadToCloudinary(audioFile);
+
+    const song = new Songs.create({
+      title,
+      artist,
+      albumId: albumId || null,
+      duration,
+      imageUrl,
+      audioUrl,
     });
-    res.cookie("adminAuth-token", newAccessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-    });
+    if (!song) {
+      return res
+        .status(500)
+        .json({ message: "Internal server error", success: false });
+    }
 
-    return res.status(200).json({ success: true, accessToken: newAccessToken });
+    if (albumId) {
+      await Album.findByIdAndUpdate(albumId, {
+        $push: { songs: song._id },
+      });
+    }
+
+    return res
+      .status(201)
+      .json({ message: "Song added successfully", success: true });
   } catch (error) {
-    throw Error(error.message);
+    next(error);
   }
 };
 
-const logoutAdmin = async (req, res) => {
+const deleteSongs = async (req, res, next) => {
   try {
-    // Clear the 'adminAuth-token' cookie
-    res.clearCookie("adminAuth-token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    const { songId } = req.params;
+    const song = await Songs.findById(songId);
+    if (!song) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Song not founded." });
+    }
+    if (song.albumId) {
+      await Album.findByIdAndUpdate(song.albumId, {
+        $pull: { songs: song_id },
+      });
+    }
+    const deleted = await Songs.findByIdAndDelete(songId);
+
+    if (!deleted) {
+      return res
+        .status(200)
+        .json({ success: false, message: "Failed to delete the song" });
+    }
     return res
       .status(200)
-      .json({ success: true, message: "Logout successfull" });
+      .json({ success: false, message: "Song deleted successfully" });
   } catch (error) {
-    throw Error(error.message);
+    next(error);
   }
 };
 
-export { loginAdmin, logoutAdmin, accessToken };
+const createAlbum = async (req, res, next) => {
+  try {
+    const { title, artist, releasedYear } = req.body;
+
+    const fields = [title, artist, releasedYear];
+
+    if (fields.some((field) => !field || field === "")) {
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
+    }
+
+    const imageFile = req.files?.imageFile;
+
+    if (!imageFile)
+      return res
+        .status(400)
+        .json({ success: false, message: "Image must be required" });
+
+    const imageUrl = await uploadToCloudinary(imageFile);
+
+    const album = await Album.create({
+      title,
+      artist,
+      imageUrl,
+      releasedYear,
+    });
+
+    if (!album) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+    return res
+      .status(201)
+      .json({ success: true, message: "Album created successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAlbum = async (req, res, next) => {
+  try {
+    const { albumId } = req.params;
+
+    await Songs.deleteMany({ albumId: albumId });
+
+    const album = await Album.findByIdAndDelete(albumId);
+
+    if (!album) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Album not founded" });
+    }
+    await album.save();
+    return res
+      .status(200)
+      .json({ success: true, message: "Album deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createSong, createAlbum, deleteAlbum, deleteSongs };

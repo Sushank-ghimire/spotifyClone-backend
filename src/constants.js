@@ -9,4 +9,10 @@ const adminCredentials = {
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
-export { adminCredentials, jwtSecret };
+const cloudinaryKeys = {
+  CLOUD_NAME: `${process.env.CLOUDINARY_CLOUD_NAME}`,
+  CLOUDINARY_API_KEY: `${process.env.CLOUDINARY_API_KEY}`,
+  CLOUDINARY_API_SECRET: `${process.env.CLOUDINARY_API_SECRET}`,
+};
+
+export { adminCredentials, jwtSecret, cloudinaryKeys };

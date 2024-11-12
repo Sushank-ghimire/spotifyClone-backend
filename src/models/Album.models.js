@@ -1,4 +1,5 @@
-import { model, models, Schema } from "mongoose";
+import mongoose from "mongoose";
+const { model, models, Schema } = mongoose;
 
 const albumSchema = new Schema(
   {
@@ -25,4 +26,4 @@ const albumSchema = new Schema(
   { timestamps: true }
 );
 
-export const Album = models("Album") || model("Album", albumSchema);
+export const Album = models.Album || model("Album", albumSchema);
