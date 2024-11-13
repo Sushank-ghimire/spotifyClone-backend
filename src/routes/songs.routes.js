@@ -1,18 +1,19 @@
 import { Router } from "express";
 import {
-  protectedRoutes,
-  requireAdmin,
-} from "../middlewares/auth.middleware.js";
-import { createSong, deleteSongs } from "../controllers/admin.controllers.js";
+  getFeaturedSongs,
+  getMadeForYouSongs,
+  getSong,
+  getTrendingSongs,
+} from "../controllers/song.controllers.js";
+import { protectedRoutes } from "../middlewares/auth.middleware.js";
 
 const songsRoutes = Router();
 
-songsRoutes.post("/create", protectedRoutes, requireAdmin, createSong);
-songsRoutes.delete(
-  "/:songId",
-  protectedRoutes,
-  requireAdmin,
-  deleteSongs
-);
+songsRoutes.use(protectedRoutes);
+
+songsRoutes.get("/:songId", getSong);
+songsRoutes.get("/featured", getFeaturedSongs);
+songsRoutes.get("/made-for-you", getMadeForYouSongs);
+songsRoutes.get("/trending", getTrendingSongs);
 
 export default songsRoutes;

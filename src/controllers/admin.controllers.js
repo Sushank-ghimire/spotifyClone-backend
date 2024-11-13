@@ -147,4 +147,14 @@ const deleteAlbum = async (req, res, next) => {
   }
 };
 
-export { createSong, createAlbum, deleteAlbum, deleteSongs };
+const checkAdmin = async (req, res, next) => {
+  try {
+    return res
+      .status(200)
+      .json({ message: "Admin authorized", isAdmin: true, success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createSong, createAlbum, deleteAlbum, deleteSongs, checkAdmin };

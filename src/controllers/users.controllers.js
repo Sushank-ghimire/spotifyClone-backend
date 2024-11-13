@@ -38,4 +38,16 @@ const userRegistration = async (req, res, next) => {
   }
 };
 
-export { userRegistration };
+const getAllUsers = async (req, res, next) => {
+  try {
+    const currentUserId = await req.auth.currentUserId;
+    const users = await User.find({ clerkId: { $ne: currentUserId } });
+
+    return res.status(200).json({ users });
+    
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { userRegistration, getAllUsers };

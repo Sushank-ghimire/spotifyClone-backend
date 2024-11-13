@@ -24,7 +24,7 @@ const requireAdmin = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    throw Error(Error.message);
+    next(error);
   }
 };
 

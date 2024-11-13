@@ -7,12 +7,12 @@ import {
   albumRoutes,
   userRoutes,
   songsRoutes,
+  adminRoutes,
   statsRoutes,
 } from "./routes/Export.js";
-import connectDatabase from "./lib/dbConnect.js";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
-import { requireAdmin } from "./middlewares/auth.middleware.js";
+import mongoose from "mongoose";
 
 configDotenv();
 const corsOptions = {
@@ -22,7 +22,7 @@ const corsOptions = {
 
 const __dirname = path.resolve();
 
-connectDatabase();
+// connectDatabase();
 const app = express();
 app.use(cookieParser());
 app.use(clerkMiddleware());
@@ -54,18 +54,23 @@ app.get("/", (req, res) => res.send("Hello world"));
 
 // User Routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/", songsRoutes);
+app.use("/api/v1/", albumRoutes);
+
+// Stats Routes
+app.use("/api/v1/stats", statsRoutes);
 
 // Admin Routes
-app.use("/api/v1/admin/songs", songsRoutes);
-app.use("/api/v1/admin/album", albumRoutes);
-app.use("/api/v1/admin/stats", statsRoutes);
+app.use("/api/v1/admin", adminRoutes);
 
-app.get("/api/v1/admin/check", requireAdmin, (req, res) => {
-  return res
-    .status(200)
-    .json({ message: "Admin authorized", admin: true, success: true });
-});
-
-app.listen(PORT || process.env.PORT, () => {
-  console.log(`Server is listning on PORT : ${PORT || process.env.PORT}`);
-});
+mongoose
+  .connect(`${process.env.MONGO_URI}`)
+  .then(() => {
+    app.listen(PORT || process.env.PORT, () => {
+      console.log(`Server is listning on PORT : ${PORT || process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB", err);
+    process.exit(1); // Exit the process if the connection fails
+  });

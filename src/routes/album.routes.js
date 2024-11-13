@@ -1,13 +1,15 @@
 import { Router } from "express";
 import {
-  protectedRoutes,
-  requireAdmin,
-} from "../middlewares/auth.middleware.js";
-import { createAlbum, deleteAlbum } from "../controllers/admin.controllers.js";
+  getAlbumById,
+  getAllAlbums,
+} from "../controllers/album.controllers.js";
+import { protectedRoutes } from "../middlewares/auth.middleware.js";
 
 const albumRoutes = Router();
 
-albumRoutes.post("/create", protectedRoutes, requireAdmin, createAlbum);
-albumRoutes.delete("/:albumId", protectedRoutes, requireAdmin, deleteAlbum);
+albumRoutes.use(protectedRoutes);
+
+albumRoutes.get("/getAlbums", getAllAlbums);
+albumRoutes.get("/:albumId", getAlbumById);
 
 export default albumRoutes;
