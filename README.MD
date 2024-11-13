@@ -5,4 +5,4 @@
 - **Mongoose for Database**  
 - **Express Router**  
 - **Socket\.IO (client)**  
-- **jwt (jsonwebtoken)**
+- **Clerk/Express**
