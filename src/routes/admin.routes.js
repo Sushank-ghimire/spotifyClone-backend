@@ -10,11 +10,11 @@ import {
 import { getSongs } from "../controllers/song.controllers.js";
 
 const adminRoutes = Router();
+// check the user is admin or not
+adminRoutes.get("/check", checkAdmin);
 
 adminRoutes.use(protectedRoutes, adminRoutes);
 
-// check the user is admin or not
-adminRoutes.get("/check", checkAdmin);
 
 // Admin Songs Routes
 adminRoutes.post("/songs/create", createSong);

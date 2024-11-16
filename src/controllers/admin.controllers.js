@@ -149,9 +149,10 @@ const deleteAlbum = async (req, res, next) => {
 
 const checkAdmin = async (req, res, next) => {
   try {
-    return res
+    res
       .status(200)
       .json({ message: "Admin authorized", isAdmin: true, success: true });
+    next();
   } catch (error) {
     next(error);
   }
