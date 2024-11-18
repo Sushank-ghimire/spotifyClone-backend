@@ -50,12 +50,12 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => res.send("Hello world"));
+app.get("/", (_, res) => res.send("Hello world"));
 
 // User Routes
 app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/", songsRoutes);
-app.use("/api/v1/", albumRoutes);
+app.use("/api/v1/songs", songsRoutes);
+app.use("/api/v1/album", albumRoutes);
 
 // Stats Routes
 app.use("/api/v1/stats", statsRoutes);

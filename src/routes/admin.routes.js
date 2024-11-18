@@ -19,7 +19,6 @@ adminRoutes.use(protectedRoutes, adminRoutes);
 // Admin Songs Routes
 adminRoutes.post("/songs/create", createSong);
 adminRoutes.delete("/songs/:songId", deleteSongs);
-adminRoutes.get("/allsongs", getSongs);
 
 // Admin Album Routes
 adminRoutes.post("/album/create", createAlbum);

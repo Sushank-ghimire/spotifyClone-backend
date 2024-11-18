@@ -3,6 +3,7 @@ import {
   getFeaturedSongs,
   getMadeForYouSongs,
   getSong,
+  getSongs,
   getTrendingSongs,
 } from "../controllers/song.controllers.js";
 import { protectedRoutes } from "../middlewares/auth.middleware.js";
@@ -15,5 +16,6 @@ songsRoutes.get("/:songId", getSong);
 songsRoutes.get("/featured", getFeaturedSongs);
 songsRoutes.get("/made-for-you", getMadeForYouSongs);
 songsRoutes.get("/trending", getTrendingSongs);
+songsRoutes.get("/", getSongs);
 
 export default songsRoutes;
