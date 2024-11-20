@@ -149,18 +149,11 @@ const deleteAlbum = async (req, res, next) => {
 
 const checkAdmin = async (req, res, next) => {
   try {
-    // If the user is an admin, send the response
-    if (req.user && req.user.isAdmin) {
-      return res
-        .status(200)
-        .json({ message: "Admin authorized", isAdmin: true, success: true });
-    }
-    // If not an admin, send an unauthorized response
     return res
-      .status(403)
-      .json({ message: "Forbidden: Not an admin", success: false });
+      .status(200)
+      .json({ message: "Admin authorized", isAdmin: true, success: true });
   } catch (error) {
-    next(error); // Pass any error to the error handler
+    next(error);
   }
 };
 
