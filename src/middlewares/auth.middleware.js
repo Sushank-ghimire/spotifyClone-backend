@@ -20,7 +20,10 @@ const requireAdmin = async (req, res, next) => {
     if (!isAdmin) {
       return res
         .status(403)
-        .json({ success: false, message: "Users account found" });
+        .json({
+          success: false,
+          message: "Access denied: Admin credentials required.",
+        });
     }
     next();
   } catch (error) {
