@@ -2,10 +2,10 @@ import { clerkClient } from "@clerk/express";
 import { adminCredentials } from "../constants.js";
 
 const protectedRoutes = async (req, res, next) => {
-  if (!req.auth.userId) {
+  if (!req.auth || !req.auth.userId) {
     return res
       .status(401)
-      .json({ message: "Unauthorized user", success: false });
+      .json({ message: "Unauthorized user", success: false }); // Send response and exit.
   }
   next();
 };
@@ -18,12 +18,10 @@ const requireAdmin = async (req, res, next) => {
       adminCredentials.email === currentUser.primaryEmailAddress?.emailAddress;
 
     if (!isAdmin) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Access denied: Admin credentials required.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Access denied: Admin credentials required.",
+      });
     }
     next();
   } catch (error) {

@@ -40,12 +40,12 @@ app.use(
 );
 
 app.use((err, req, res, next) => {
-  res.status(500).json({
-    message:
-      process.env.NODE_ENV === "production"
-        ? "Internal server error"
-        : err.message,
-  });
+  if (res.headersSent) {
+    console.error("Headers already sent:", err.message);
+    return next(err); // Pass to default Express error handler.
+  }
+  console.error("Unhandled error:", err.message);
+  res.status(500).json({ success: false, message: "Internal server error" });
 });
 
 const PORT = process.env.PORT || 3000;
