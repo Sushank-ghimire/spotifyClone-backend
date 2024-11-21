@@ -12,7 +12,7 @@ const songsRoutes = Router();
 
 songsRoutes.use(protectedRoutes);
 
-songsRoutes.get("/:songId", getSong);
+songsRoutes.get("/song/:songId", getSong);
 songsRoutes.get("/featured", getFeaturedSongs);
 songsRoutes.get("/made-for-you", getMadeForYouSongs);
 songsRoutes.get("/trending", getTrendingSongs);
