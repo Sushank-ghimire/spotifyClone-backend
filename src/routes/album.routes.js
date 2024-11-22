@@ -7,9 +7,7 @@ import { protectedRoutes } from "../middlewares/auth.middleware.js";
 
 const albumRoutes = Router();
 
-albumRoutes.use(protectedRoutes);
-
 albumRoutes.get("/getAlbums", getAllAlbums);
-albumRoutes.get("/:albumId", getAlbumById);
+albumRoutes.get("/:albumId", protectedRoutes, getAlbumById);
 
 export default albumRoutes;

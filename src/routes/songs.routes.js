@@ -10,12 +10,10 @@ import { protectedRoutes } from "../middlewares/auth.middleware.js";
 
 const songsRoutes = Router();
 
-songsRoutes.use(protectedRoutes);
-
-songsRoutes.get("/song/:songId", getSong);
+songsRoutes.get("/song/:songId", protectedRoutes, getSong);
 songsRoutes.get("/featured", getFeaturedSongs);
 songsRoutes.get("/made-for-you", getMadeForYouSongs);
 songsRoutes.get("/trending", getTrendingSongs);
-songsRoutes.get("/", getSongs);
+songsRoutes.get("/", protectedRoutes, getSongs);
 
 export default songsRoutes;
