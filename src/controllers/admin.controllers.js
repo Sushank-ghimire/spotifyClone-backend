@@ -13,7 +13,7 @@ const createSong = async (req, res, next) => {
 
     const { title, artist, albumId, duration } = req.body;
 
-    const allFields = [title, artist, albumId, duration];
+    const allFields = [title, artist, duration];
 
     if (allFields.some((field) => !field || field === "")) {
       return res
@@ -78,7 +78,7 @@ const deleteSongs = async (req, res, next) => {
     }
     return res
       .status(200)
-      .json({ success: false, message: "Song deleted successfully" });
+      .json({ success: true, message: "Song deleted successfully" });
   } catch (error) {
     next(error);
   }

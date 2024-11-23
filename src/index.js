@@ -16,8 +16,7 @@ import mongoose from "mongoose";
 
 configDotenv();
 const corsOptions = {
-  // origin: "http://localhost:5173",
-  origin: "*",
+  origin: "http://localhost:5173",
 };
 
 const __dirname = path.resolve();
