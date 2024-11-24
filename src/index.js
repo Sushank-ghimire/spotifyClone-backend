@@ -13,6 +13,8 @@ import {
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
 import mongoose from "mongoose";
+import { createServer } from "http";
+import { initializeSocket } from "./lib/Socket.js";
 
 configDotenv();
 const corsOptions = {
@@ -23,6 +25,10 @@ const __dirname = path.resolve();
 
 // connectDatabase();
 const app = express();
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
+
 app.use(cookieParser());
 app.use(clerkMiddleware());
 app.use(cors(corsOptions));
@@ -65,7 +71,7 @@ app.use("/api/v1/admin", adminRoutes);
 mongoose
   .connect(`${process.env.MONGO_URI}`)
   .then(() => {
-    app.listen(PORT || process.env.PORT, () => {
+    httpServer.listen(PORT || process.env.PORT, () => {
       console.log(`Server is listning on PORT : ${PORT || process.env.PORT}`);
     });
   })
