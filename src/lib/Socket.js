@@ -46,7 +46,7 @@ const initializeSocket = (server) => {
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("receive_message", addMessage);
         }
-        socket.emit("message_sent", addMessage);
+        socket.emit("send_message", addMessage);
       } catch (error) {
         console.log("error while grabbing message data : ", error.message);
       }
