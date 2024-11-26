@@ -47,8 +47,7 @@ const getAllUsers = async (req, res, next) => {
         .status(400)
         .json({ error: "Current user ID is not available" });
     }
-    // const users = await User.find({ clerkId: { $ne: currentUserId } });
-    const users = await User.find({});
+    const users = await User.find({ clerkId: { $ne: currentUserId } });
 
     return res.status(200).json({ users });
   } catch (error) {
