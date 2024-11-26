@@ -41,8 +41,14 @@ const userRegistration = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const currentUserId = await req.auth.currentUserId;
-    const users = await User.find({ clerkId: { $ne: currentUserId } });
+    const currentUserId = await req.auth?.userId;
+    if (!currentUserId) {
+      return res
+        .status(400)
+        .json({ error: "Current user ID is not available" });
+    }
+    // const users = await User.find({ clerkId: { $ne: currentUserId } });
+    const users = await User.find({});
 
     return res.status(200).json({ users });
   } catch (error) {
