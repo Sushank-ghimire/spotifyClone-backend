@@ -68,9 +68,9 @@ app.use("/api/v1/admin", adminRoutes);
 
 // Making static dist folder and upload the production ready app
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "/dist")));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+    res.sendFile(path.resolve(__dirname, "/dist/index.html"));
   });
 }
 
