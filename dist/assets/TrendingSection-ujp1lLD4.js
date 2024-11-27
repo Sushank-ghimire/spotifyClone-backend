@@ -1,0 +1,1 @@
+import{b as i,j as r}from"./index-C6cZrQKt.js";import{D as o}from"./DisplaySongs-BAA_GKBY.js";const c=()=>{const{trendingSongs:e}=i();return r.jsx("div",{className:"grid grid-cols-1 md:grid-cols-2 w-full items-center place-items-center lg:grid-cols-3 gap-4 mb-8",children:e.map(s=>r.jsx(o,{songs:s},s._id))})};export{c as T};
