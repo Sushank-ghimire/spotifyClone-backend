@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon ./src/index.js",
+    "serve": "node ./src/index.js",
     "seed:songs": "node ./src/seed/songs.js",
     "seed:albums": "node ./src/seed/albums.js"
   },

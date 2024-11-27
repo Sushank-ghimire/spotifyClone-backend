@@ -55,8 +55,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (_, res) => res.send("Hello world"));
-
 // User Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/songs", songsRoutes);
@@ -67,6 +65,14 @@ app.use("/api/v1/stats", statsRoutes);
 
 // Admin Routes
 app.use("/api/v1/admin", adminRoutes);
+
+// Making static dist folder and upload the production ready app
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  });
+}
 
 mongoose
   .connect(`${process.env.MONGO_URI}`)
