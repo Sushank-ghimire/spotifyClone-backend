@@ -1,0 +1,1 @@
+import{d as n,j as e,g as t}from"./index-CjmrAWQN.js";const i=n("/sign-up/")({component:s});function s(){return e.jsx("main",{className:"min-h-screen w-screen flex justify-center items-center",children:e.jsx(t,{path:"/sign-up"})})}export{i as Route};

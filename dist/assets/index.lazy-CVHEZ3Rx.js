@@ -1,1 +1,0 @@
-import{d as n,j as e,h as t}from"./index-C6cZrQKt.js";const o=n("/sign-in/")({component:s});function s(){return e.jsx("main",{className:"min-h-screen w-screen flex justify-center items-center",children:e.jsx(t,{path:"/sign-in"})})}export{o as Route};
